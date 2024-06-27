@@ -15,6 +15,7 @@ BROWSERSTACK_UI_PASSWORD = os.environ.get("BROWSERSTACK_UI_PASSWORD") or "BROWSE
 
 def run_clean():
     try:
+        timeout_value = 15
         driver = webdriver.Chrome()
         driver.maximize_window()
 
@@ -22,15 +23,15 @@ def run_clean():
 
         # Attempt sign in
         try:
-            WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+            WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable(
                 (By.LINK_TEXT, "Sign in"))).click()
         except TimeoutException:
 
             try:
-                WebDriverWait(driver, 10).until(
-                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, timeout_value).until(
+                    EC.element_to_be_clickable((By.ID, "primary-menu-toggle"))).click()
 
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.LINK_TEXT, "Sign in"))).click()
+                WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable((By.LINK_TEXT, "Sign in"))).click()
             except TimeoutException:
                 driver.execute_script(
                     'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": ' + json.dumps(
@@ -47,14 +48,14 @@ def run_clean():
 
         # Attempt to click on the "Invite team" link
         try:
-            WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+            WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable(
                 (By.ID, "invite-link"))).click()
         except TimeoutException:
             try:
-                WebDriverWait(driver, 10).until(
-                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, timeout_value).until(
+                    EC.element_to_be_clickable((By.ID, "primary-menu-toggle"))).click()
 
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "invite-link"))).click()
+                WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable((By.ID, "invite-link"))).click()
             except TimeoutException:
                 driver.execute_script(
                     'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": ' + json.dumps(
@@ -63,13 +64,13 @@ def run_clean():
 
         # Attempt to copy link text
         try:
-            the_link = WebDriverWait(driver, 10).until(
+            the_link = WebDriverWait(driver, timeout_value).until(
                 EC.visibility_of_element_located((By.XPATH, "//*[@class='manage-users__invite-copyLink-text']"))).text
         except TimeoutException:
             try:
                 # likely in the case where the modal popped up instead of the manage users page, not sure why this
                 # happens sometimes
-                the_link = WebDriverWait(driver, 10).until(
+                the_link = WebDriverWait(driver, timeout_value).until(
                     EC.visibility_of_element_located((By.XPATH, "//*[@class='invite-modal__copy_text']"))).text
 
                 driver.find_element(by=By.ID, value="invite-modal__close").click()
@@ -81,15 +82,15 @@ def run_clean():
 
         # Attempt to sign out
         try:
-            WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "account-menu-toggle"))).click()
+            WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable((By.ID, "account-menu-toggle"))).click()
 
-            WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "sign_out_link"))).click()
+            WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable((By.ID, "sign_out_link"))).click()
         except TimeoutException:
             try:
-                WebDriverWait(driver, 10).until(
-                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, timeout_value).until(
+                    EC.element_to_be_clickable((By.ID, "primary-menu-toggle"))).click()
 
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.LINK_TEXT, "Sign out"))).click()
+                WebDriverWait(driver, timeout_value).until(EC.element_to_be_clickable((By.LINK_TEXT, "Sign out"))).click()
             except TimeoutException:
                 driver.execute_script(
                     'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": ' + json.dumps(
