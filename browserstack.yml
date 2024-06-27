@@ -1,0 +1,18 @@
+userName: fill-in-your-username
+accessKey: fill-in-your-key
+platforms:
+  - os: Windows
+    osVersion: 10
+    browserName: Chrome
+    browserVersion: latest
+  - os: OS X
+    osVersion: Ventura
+    browserName: Firefox
+    browserVersion: latest
+  - deviceName: Samsung Galaxy S22
+    osVersion: 12.0
+    browserName: samsung
+    deviceOrientation: portrait
+browserstackLocal: false
+buildName: browserstack-shanko-0.1
+projectName: BrowserStack Shanko Project
