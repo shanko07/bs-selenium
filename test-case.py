@@ -27,7 +27,8 @@ def run_clean():
         except TimeoutException:
 
             try:
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
 
                 WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.LINK_TEXT, "Sign in"))).click()
             except TimeoutException:
@@ -50,7 +51,8 @@ def run_clean():
                 (By.ID, "invite-link"))).click()
         except TimeoutException:
             try:
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
 
                 WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "invite-link"))).click()
             except TimeoutException:
@@ -64,10 +66,18 @@ def run_clean():
             the_link = WebDriverWait(driver, 10).until(
                 EC.visibility_of_element_located((By.XPATH, "//*[@class='manage-users__invite-copyLink-text']"))).text
         except TimeoutException:
-            driver.execute_script(
-                'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": ' + json.dumps(
-                    "Failed to find and copy the invite link") + '}}')
-            assert False, "Failed to find and copy the invite link"
+            try:
+                # likely in the case where the modal popped up instead of the manage users page, not sure why this
+                # happens sometimes
+                the_link = WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.XPATH, "//*[@class='invite-modal__copy_text']"))).text
+
+                driver.find_element(by=By.ID, value="invite-modal__close").click()
+            except TimeoutException:
+                driver.execute_script(
+                    'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": ' + json.dumps(
+                        "Failed to find and copy the invite link") + '}}')
+                assert False, "Failed to find and copy the invite link"
 
         # Attempt to sign out
         try:
@@ -76,7 +86,8 @@ def run_clean():
             WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "sign_out_link"))).click()
         except TimeoutException:
             try:
-                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
+                WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.ID, "primary-menu-toggle"))).click()
 
                 WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.LINK_TEXT, "Sign out"))).click()
             except TimeoutException:
